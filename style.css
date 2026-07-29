@@ -1,0 +1,729 @@
+/* ==========================================
+   RESET
+========================================== */
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+body {
+    min-height: 100vh;
+
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+
+    padding: 30px 20px;
+
+    background: #0d100d;
+    color: #ffffff;
+}
+
+
+/* ==========================================
+   MAIN APP
+========================================== */
+
+.app {
+    position: relative;
+
+    width: 100%;
+    max-width: 480px;
+    min-height: 760px;
+
+    padding: 28px 26px 105px;
+
+    background: #171b17;
+
+    border: 1px solid #252a25;
+    border-radius: 32px;
+
+    box-shadow:
+        0 25px 70px
+        rgba(0, 0, 0, 0.35);
+}
+
+
+/* ==========================================
+   TOP BAR
+========================================== */
+
+.top-bar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    margin-bottom: 38px;
+}
+
+.app-label {
+    color: #8b908b;
+
+    font-size: 11px;
+    font-weight: 600;
+
+    letter-spacing: 1.5px;
+}
+
+.header-button {
+    width: 40px;
+    height: 40px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border: none;
+    border-radius: 50%;
+
+    background: transparent;
+    color: #ffffff;
+
+    font-size: 19px;
+
+    cursor: pointer;
+
+    transition: 0.2s;
+}
+
+.header-button:hover {
+    background: #242924;
+}
+
+
+/* ==========================================
+   SPENDING
+========================================== */
+
+.spending-section {
+    margin-bottom: 35px;
+}
+
+.spending-header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+
+    margin-bottom: 30px;
+}
+
+.spending-header h1 {
+    margin-bottom: 6px;
+
+    font-size: 50px;
+    font-weight: 400;
+
+    letter-spacing: -2px;
+}
+
+.spending-header p {
+    color: #7f857f;
+
+    font-size: 13px;
+}
+
+
+/* ==========================================
+   PERIOD SELECT
+========================================== */
+
+#periodSelect {
+    margin-top: 8px;
+
+    padding: 8px 5px;
+
+    border: none;
+    outline: none;
+
+    background: transparent;
+    color: #ffffff;
+
+    font-size: 13px;
+    font-weight: 600;
+
+    cursor: pointer;
+}
+
+#periodSelect option {
+    background: #202520;
+    color: #ffffff;
+}
+
+
+/* ==========================================
+   CHART
+========================================== */
+
+.chart {
+    width: 100%;
+    height: 170px;
+
+    display: flex;
+    align-items: flex-end;
+}
+
+.chart-bars {
+    width: 100%;
+    height: 140px;
+
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+
+    border-bottom: 1px solid #505650;
+}
+
+.bar-wrapper {
+    position: relative;
+
+    width: 15%;
+    height: 100%;
+
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+}
+
+.bar {
+    width: 100%;
+
+    border: 1px solid #4c524c;
+    border-bottom: none;
+
+    transition: height 0.4s ease;
+}
+
+.bar.active {
+    border: 2px solid #71d68c;
+
+    background-image:
+        repeating-linear-gradient(
+            -45deg,
+            transparent,
+            transparent 6px,
+            rgba(113, 214, 140, 0.55) 7px,
+            rgba(113, 214, 140, 0.55) 8px
+        );
+}
+
+.bar-wrapper span {
+    position: absolute;
+
+    bottom: -27px;
+
+    color: #686e68;
+
+    font-size: 12px;
+}
+
+.bar-wrapper .active-month {
+    color: #ffffff;
+    font-weight: 600;
+}
+
+
+/* ==========================================
+   HISTORY
+========================================== */
+
+.history {
+    margin-top: 52px;
+}
+
+.section-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    margin-bottom: 20px;
+}
+
+.section-header h2 {
+    font-size: 26px;
+    font-weight: 600;
+}
+
+#seeAllBtn {
+    border: none;
+
+    background: transparent;
+    color: #ffffff;
+
+    font-size: 13px;
+
+    cursor: pointer;
+}
+
+#seeAllBtn:hover {
+    opacity: 0.65;
+}
+
+
+/* ==========================================
+   SUBSCRIPTION LIST
+========================================== */
+
+#subscriptionList {
+    display: flex;
+    flex-direction: column;
+
+    gap: 12px;
+}
+
+
+/* ==========================================
+   SUBSCRIPTION CARD
+========================================== */
+
+.subscription-card {
+    width: 100%;
+
+    display: flex;
+    align-items: center;
+
+    padding: 15px;
+
+    background: #1e231e;
+
+    border-radius: 18px;
+
+    transition:
+        transform 0.2s ease,
+        background 0.2s ease;
+}
+
+.subscription-card:hover {
+    transform: translateY(-2px);
+
+    background: #232823;
+}
+
+
+/* ==========================================
+   SUBSCRIPTION LEFT
+========================================== */
+
+.subscription-left {
+    display: flex;
+    align-items: center;
+
+    gap: 13px;
+
+    min-width: 0;
+    flex: 1;
+}
+
+
+/* ==========================================
+   SERVICE ICON
+========================================== */
+
+.service-icon {
+    width: 48px;
+    height: 48px;
+
+    flex-shrink: 0;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 50%;
+
+    background: #2a2f2a;
+    color: #ffffff;
+
+    font-size: 17px;
+    font-weight: bold;
+}
+
+
+/* ==========================================
+   SERVICE INFO
+========================================== */
+
+.service-info {
+    min-width: 0;
+}
+
+.service-info h3 {
+    margin-bottom: 4px;
+
+    overflow: hidden;
+
+    font-size: 15px;
+    font-weight: 500;
+
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.service-info p {
+    overflow: hidden;
+
+    color: #858b85;
+
+    font-size: 12px;
+
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+
+/* ==========================================
+   PRICE / DATE
+========================================== */
+
+.subscription-right {
+    flex-shrink: 0;
+
+    margin-left: 10px;
+
+    text-align: right;
+}
+
+.subscription-price {
+    margin-bottom: 4px;
+
+    font-size: 15px;
+}
+
+.subscription-date {
+    color: #858b85;
+
+    font-size: 11px;
+}
+
+
+/* ==========================================
+   EDIT / DELETE BUTTONS
+========================================== */
+
+.subscription-actions {
+    display: flex;
+
+    gap: 5px;
+
+    margin-left: 10px;
+}
+
+.action-button {
+    width: 29px;
+    height: 29px;
+
+    border: none;
+    border-radius: 50%;
+
+    background: #292e29;
+    color: #929792;
+
+    font-size: 11px;
+
+    cursor: pointer;
+
+    transition: 0.2s;
+}
+
+.action-button:hover {
+    background: #353b35;
+    color: #ffffff;
+}
+
+.delete-button:hover {
+    color: #ff7070;
+}
+
+
+/* ==========================================
+   ADD BUTTON
+========================================== */
+
+.add-button {
+    position: absolute;
+
+    right: 25px;
+    bottom: 25px;
+
+    width: 60px;
+    height: 60px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border: none;
+    border-radius: 50%;
+
+    background: #ffffff;
+    color: #151915;
+
+    font-size: 23px;
+
+    cursor: pointer;
+
+    box-shadow:
+        0 8px 25px
+        rgba(0, 0, 0, 0.4);
+
+    transition:
+        transform 0.2s ease,
+        opacity 0.2s ease;
+
+    z-index: 100;
+}
+
+.add-button:hover {
+    transform: scale(1.07);
+}
+
+.add-button:active {
+    transform: scale(0.95);
+}
+
+
+/* ==========================================
+   EMPTY STATE
+========================================== */
+
+.empty-state {
+    padding: 45px 15px;
+
+    color: #737973;
+
+    font-size: 14px;
+
+    text-align: center;
+}
+
+
+/* ==========================================
+   MODAL BACKGROUND
+========================================== */
+
+.modal {
+    position: fixed;
+
+    inset: 0;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    padding: 20px;
+
+    background: rgba(0, 0, 0, 0.75);
+
+    z-index: 1000;
+}
+
+.hidden {
+    display: none;
+}
+
+
+/* ==========================================
+   MODAL
+========================================== */
+
+.modal-content {
+    width: 100%;
+    max-width: 390px;
+
+    padding: 27px;
+
+    background: #202520;
+
+    border: 1px solid #303630;
+    border-radius: 24px;
+
+    box-shadow:
+        0 20px 60px
+        rgba(0, 0, 0, 0.5);
+
+    animation: modalPop 0.2s ease;
+}
+
+@keyframes modalPop {
+
+    from {
+        opacity: 0;
+        transform: scale(0.94);
+    }
+
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+
+}
+
+.modal-content h2 {
+    margin-bottom: 23px;
+
+    font-size: 22px;
+}
+
+
+/* ==========================================
+   FORM
+========================================== */
+
+.modal-content label {
+    display: block;
+
+    margin-bottom: 7px;
+
+    color: #9ba19b;
+
+    font-size: 12px;
+}
+
+.modal-content input {
+    width: 100%;
+
+    margin-bottom: 16px;
+
+    padding: 13px 14px;
+
+    border: 1px solid #373d37;
+    border-radius: 11px;
+
+    outline: none;
+
+    background: #171b17;
+    color: #ffffff;
+
+    font-size: 14px;
+
+    transition: border-color 0.2s ease;
+}
+
+.modal-content input:focus {
+    border-color: #71d68c;
+}
+
+.modal-content input[type="date"] {
+    color-scheme: dark;
+}
+
+
+/* ==========================================
+   MODAL ACTIONS
+========================================== */
+
+.modal-actions {
+    display: flex;
+
+    gap: 10px;
+
+    margin-top: 7px;
+}
+
+.modal-actions button {
+    flex: 1;
+
+    padding: 12px;
+
+    border: none;
+    border-radius: 11px;
+
+    font-size: 14px;
+    font-weight: 600;
+
+    cursor: pointer;
+}
+
+.cancel-button {
+    background: #303530;
+    color: #ffffff;
+}
+
+.cancel-button:hover {
+    background: #3b413b;
+}
+
+.save-button {
+    background: #71d68c;
+    color: #101410;
+}
+
+.save-button:hover {
+    opacity: 0.85;
+}
+
+
+/* ==========================================
+   MOBILE
+========================================== */
+
+@media (max-width: 520px) {
+
+    body {
+        padding: 0;
+    }
+
+    .app {
+        max-width: none;
+
+        min-height: 100vh;
+
+        padding:
+            24px
+            20px
+            100px;
+
+        border: none;
+        border-radius: 0;
+    }
+
+    .spending-header h1 {
+        font-size: 45px;
+    }
+
+    .chart {
+        height: 160px;
+    }
+
+    .chart-bars {
+        height: 130px;
+    }
+
+    .add-button {
+        position: fixed;
+
+        right: 20px;
+        bottom: 20px;
+    }
+
+}
+
+
+/* ==========================================
+   VERY SMALL SCREENS
+========================================== */
+
+@media (max-width: 390px) {
+
+    .app {
+        padding-left: 16px;
+        padding-right: 16px;
+    }
+
+    .subscription-card {
+        padding: 12px;
+    }
+
+    .service-icon {
+        width: 43px;
+        height: 43px;
+    }
+
+    .subscription-actions {
+        margin-left: 6px;
+    }
+
+}
