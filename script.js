@@ -2,7 +2,9 @@
 // FASTAPI URL
 // ==========================================
 
+// LOCAL DEVELOPMENT
 const API_URL = "https://subscription-tracker-backend-tspm.onrender.com";
+
 
 
 // ==========================================
@@ -42,21 +44,25 @@ const saveBtn =
 const cancelBtn =
     document.getElementById("cancelBtn");
 
+const periodSelect =
+    document.getElementById("periodSelect");
+
+const chartBars =
+    document.getElementById("chartBars");
+
 
 // ==========================================
 // VARIABLES
 // ==========================================
 
-// Subscriptions received from FastAPI
 let subscriptions = [];
 
-// null = adding
-// number = editing
 let editingId = null;
 
 
 // ==========================================
-// GET SUBSCRIPTIONS FROM FASTAPI
+// LOAD SUBSCRIPTIONS
+// GET
 // ==========================================
 
 async function loadSubscriptions() {
@@ -84,6 +90,8 @@ async function loadSubscriptions() {
         displaySubscriptions();
 
         calculateTotal();
+
+        updateChart();
 
     }
 
@@ -136,7 +144,7 @@ function displaySubscriptions() {
         );
 
 
-        // First letter becomes icon
+        // First letter becomes profile icon
 
         const initial =
             subscription.service
@@ -190,13 +198,18 @@ function displaySubscriptions() {
             <div class="subscription-right">
 
                 <div class="subscription-price">
+
                     -$${Number(
                         subscription.price
                     ).toFixed(2)}
+
                 </div>
 
+
                 <div class="subscription-date">
+
                     ${formattedDate}
+
                 </div>
 
             </div>
@@ -209,7 +222,9 @@ function displaySubscriptions() {
                     data-id="${subscription.id}"
                     title="Edit"
                 >
+
                     <i class="fa-solid fa-pen"></i>
+
                 </button>
 
 
@@ -218,7 +233,9 @@ function displaySubscriptions() {
                     data-id="${subscription.id}"
                     title="Delete"
                 >
+
                     <i class="fa-solid fa-trash"></i>
+
                 </button>
 
             </div>
@@ -234,13 +251,58 @@ function displaySubscriptions() {
 
 
 // ==========================================
-// CALCULATE TOTAL SPENDING
+// CALCULATE TOTAL
 // ==========================================
 
 function calculateTotal() {
 
+    let subscriptionsToCalculate =
+        subscriptions;
+
+
+    // THIS MONTH
+
+    if (periodSelect.value === "month") {
+
+        const today =
+            new Date();
+
+
+        const currentMonth =
+            today.getMonth();
+
+
+        const currentYear =
+            today.getFullYear();
+
+
+        subscriptionsToCalculate =
+            subscriptions.filter(
+                subscription => {
+
+                    const date =
+                        new Date(
+                            subscription.billingDate +
+                            "T00:00:00"
+                        );
+
+
+                    return (
+                        date.getMonth() ===
+                        currentMonth
+                        &&
+                        date.getFullYear() ===
+                        currentYear
+                    );
+
+                }
+            );
+
+    }
+
+
     const total =
-        subscriptions.reduce(
+        subscriptionsToCalculate.reduce(
             (sum, subscription) => {
 
                 return (
@@ -260,27 +322,220 @@ function calculateTotal() {
 
 
 // ==========================================
-// CHART
+// DYNAMIC CHART
 // ==========================================
 
-function setupChart() {
+function updateChart() {
 
-    const bars =
-        document.querySelectorAll(".bar");
+    // Clear existing chart
 
-
-    bars.forEach(bar => {
-
-        const height =
-            bar.dataset.height;
+    chartBars.innerHTML = "";
 
 
-        bar.style.height =
-            `${height}%`;
+    const today =
+        new Date();
+
+
+    const months = [];
+
+
+    // ======================================
+    // GENERATE LAST 6 MONTHS
+    // ======================================
+
+    for (let i = 5; i >= 0; i--) {
+
+        const date =
+            new Date(
+                today.getFullYear(),
+                today.getMonth() - i,
+                1
+            );
+
+
+        months.push({
+
+            month:
+                date.getMonth(),
+
+            year:
+                date.getFullYear(),
+
+            name:
+                date.toLocaleDateString(
+                    "en-US",
+                    {
+                        month: "short"
+                    }
+                ),
+
+            total: 0
+
+        });
+
+    }
+
+
+    // ======================================
+    // ADD SUBSCRIPTIONS TO THEIR MONTHS
+    // ======================================
+
+    subscriptions.forEach(
+        subscription => {
+
+            const subscriptionDate =
+                new Date(
+                    subscription.billingDate +
+                    "T00:00:00"
+                );
+
+
+            const subscriptionMonth =
+                subscriptionDate.getMonth();
+
+
+            const subscriptionYear =
+                subscriptionDate.getFullYear();
+
+
+            const matchingMonth =
+                months.find(
+                    month => {
+
+                        return (
+                            month.month ===
+                            subscriptionMonth
+                            &&
+                            month.year ===
+                            subscriptionYear
+                        );
+
+                    }
+                );
+
+
+            if (matchingMonth) {
+
+                matchingMonth.total +=
+                    Number(
+                        subscription.price
+                    );
+
+            }
+
+        }
+    );
+
+
+    // ======================================
+    // FIND HIGHEST MONTH
+    // ======================================
+
+    const highestAmount =
+        Math.max(
+            ...months.map(
+                month => month.total
+            )
+        );
+
+
+    // ======================================
+    // CREATE BARS
+    // ======================================
+
+    months.forEach(month => {
+
+        let height = 0;
+
+
+        if (highestAmount > 0) {
+
+            height =
+                (
+                    month.total /
+                    highestAmount
+                ) * 100;
+
+        }
+
+
+        // Small spending should still
+        // produce a visible bar
+
+        if (
+            month.total > 0 &&
+            height < 8
+        ) {
+
+            height = 8;
+
+        }
+
+
+        const isHighest =
+            month.total === highestAmount &&
+            highestAmount > 0;
+
+
+        const wrapper =
+            document.createElement("div");
+
+
+        wrapper.classList.add(
+            "bar-wrapper"
+        );
+
+
+        wrapper.innerHTML = `
+
+            <div
+                class="bar ${isHighest ? "active" : ""}"
+
+                style="
+                    height: ${height}%;
+                "
+
+                title="
+                    ${month.name} ${month.year}:
+                    $${month.total.toFixed(2)}
+                "
+            ></div>
+
+
+            <span
+                class="
+                    ${isHighest ? "active-month" : ""}
+                "
+            >
+
+                ${month.name}
+
+            </span>
+
+        `;
+
+
+        chartBars.appendChild(
+            wrapper
+        );
 
     });
 
 }
+
+
+// ==========================================
+// PERIOD SELECT
+// ==========================================
+
+periodSelect.addEventListener(
+    "change",
+    function () {
+
+        calculateTotal();
+
+    }
+);
 
 
 // ==========================================
@@ -291,7 +546,6 @@ addBtn.addEventListener(
     "click",
     function () {
 
-        // null means we're adding
         editingId = null;
 
 
@@ -303,7 +557,7 @@ addBtn.addEventListener(
             "Save";
 
 
-        // Clear form
+        // Clear inputs
 
         serviceInput.value = "";
 
@@ -332,6 +586,7 @@ function closeModal() {
         "hidden"
     );
 
+
     editingId = null;
 
 }
@@ -343,7 +598,7 @@ cancelBtn.addEventListener(
 );
 
 
-// Clicking outside popup closes it
+// Click background to close
 
 modal.addEventListener(
     "click",
@@ -376,19 +631,21 @@ saveBtn.addEventListener(
 
 
         const price =
-            Number(priceInput.value);
+            Number(
+                priceInput.value
+            );
 
 
         const billingDate =
             dateInput.value;
 
 
-        // Validation
+        // VALIDATION
 
         if (
             !service ||
             !plan ||
-            !price ||
+            price <= 0 ||
             !billingDate
         ) {
 
@@ -400,8 +657,6 @@ saveBtn.addEventListener(
 
         }
 
-
-        // Object we'll send to FastAPI
 
         const subscriptionData = {
 
@@ -416,7 +671,7 @@ saveBtn.addEventListener(
         };
 
 
-        // Are we editing?
+        // EDIT
 
         if (editingId !== null) {
 
@@ -427,7 +682,8 @@ saveBtn.addEventListener(
 
         }
 
-        // Otherwise add new subscription
+
+        // ADD
 
         else {
 
@@ -442,8 +698,8 @@ saveBtn.addEventListener(
 
 
 // ==========================================
-// POST
 // ADD SUBSCRIPTION
+// POST
 // ==========================================
 
 async function addSubscription(
@@ -460,8 +716,10 @@ async function addSubscription(
                     method: "POST",
 
                     headers: {
+
                         "Content-Type":
                             "application/json"
+
                     },
 
                     body:
@@ -482,12 +740,10 @@ async function addSubscription(
         }
 
 
-        // Close popup
-
         closeModal();
 
 
-        // Ask FastAPI for updated data
+        // Reload from FastAPI / database
 
         await loadSubscriptions();
 
@@ -496,6 +752,7 @@ async function addSubscription(
     catch (error) {
 
         console.error(error);
+
 
         alert(
             "Could not add subscription."
@@ -507,8 +764,8 @@ async function addSubscription(
 
 
 // ==========================================
-// PUT
 // UPDATE SUBSCRIPTION
+// PUT
 // ==========================================
 
 async function updateSubscription(
@@ -526,8 +783,10 @@ async function updateSubscription(
                     method: "PUT",
 
                     headers: {
+
                         "Content-Type":
                             "application/json"
+
                     },
 
                     body:
@@ -551,7 +810,7 @@ async function updateSubscription(
         closeModal();
 
 
-        // Reload latest data
+        // Reload latest database data
 
         await loadSubscriptions();
 
@@ -560,6 +819,7 @@ async function updateSubscription(
     catch (error) {
 
         console.error(error);
+
 
         alert(
             "Could not update subscription."
@@ -584,7 +844,9 @@ async function deleteSubscription(id) {
 
 
     if (!subscription) {
+
         return;
+
     }
 
 
@@ -595,7 +857,9 @@ async function deleteSubscription(id) {
 
 
     if (!confirmed) {
+
         return;
+
     }
 
 
@@ -605,7 +869,9 @@ async function deleteSubscription(id) {
             await fetch(
                 `${API_URL}/subscriptions/${id}`,
                 {
+
                     method: "DELETE"
+
                 }
             );
 
@@ -619,7 +885,7 @@ async function deleteSubscription(id) {
         }
 
 
-        // Get updated subscriptions
+        // Reload latest database data
 
         await loadSubscriptions();
 
@@ -628,6 +894,7 @@ async function deleteSubscription(id) {
     catch (error) {
 
         console.error(error);
+
 
         alert(
             "Could not delete subscription."
@@ -653,7 +920,9 @@ subscriptionList.addEventListener(
 
 
         if (!button) {
+
             return;
+
         }
 
 
@@ -706,7 +975,9 @@ function openEditModal(id) {
 
 
     if (!subscription) {
+
         return;
+
     }
 
 
@@ -721,7 +992,7 @@ function openEditModal(id) {
         "Update";
 
 
-    // Fill form with existing values
+    // Pre-fill form
 
     serviceInput.value =
         subscription.service;
@@ -751,5 +1022,3 @@ function openEditModal(id) {
 // ==========================================
 
 loadSubscriptions();
-
-setupChart();

@@ -23,9 +23,7 @@
 
     <main class="app">
 
-        <!-- =========================
-             TOP BAR
-        ========================== -->
+        <!-- TOP BAR -->
 
         <header class="top-bar">
 
@@ -40,9 +38,7 @@
         </header>
 
 
-        <!-- =========================
-             SPENDING
-        ========================== -->
+        <!-- SPENDING -->
 
         <section class="spending-section">
 
@@ -76,87 +72,15 @@
             </div>
 
 
-            <!-- =========================
-                 CHART
-            ========================== -->
+            <!-- DYNAMIC CHART -->
 
             <div class="chart">
 
-                <div class="chart-bars">
-
-                    <div class="bar-wrapper">
-
-                        <div
-                            class="bar"
-                            data-height="25"
-                        ></div>
-
-                        <span>Apr</span>
-
-                    </div>
-
-
-                    <div class="bar-wrapper">
-
-                        <div
-                            class="bar"
-                            data-height="45"
-                        ></div>
-
-                        <span>May</span>
-
-                    </div>
-
-
-                    <div class="bar-wrapper">
-
-                        <div
-                            class="bar"
-                            data-height="70"
-                        ></div>
-
-                        <span>Jun</span>
-
-                    </div>
-
-
-                    <div class="bar-wrapper">
-
-                        <div
-                            class="bar active"
-                            data-height="100"
-                        ></div>
-
-                        <span class="active-month">
-                            Jul
-                        </span>
-
-                    </div>
-
-
-                    <div class="bar-wrapper">
-
-                        <div
-                            class="bar"
-                            data-height="55"
-                        ></div>
-
-                        <span>Aug</span>
-
-                    </div>
-
-
-                    <div class="bar-wrapper">
-
-                        <div
-                            class="bar"
-                            data-height="80"
-                        ></div>
-
-                        <span>Sep</span>
-
-                    </div>
-
+                <div
+                    class="chart-bars"
+                    id="chartBars"
+                >
+                    <!-- JavaScript generates bars -->
                 </div>
 
             </div>
@@ -164,9 +88,7 @@
         </section>
 
 
-        <!-- =========================
-             HISTORY
-        ========================== -->
+        <!-- HISTORY -->
 
         <section class="history">
 
@@ -186,24 +108,22 @@
         </section>
 
 
-        <!-- =========================
-             ADD BUTTON
-        ========================== -->
+        <!-- ADD BUTTON -->
 
         <button
             class="add-button"
             id="addBtn"
             title="Add subscription"
         >
+
             <i class="fa-solid fa-plus"></i>
+
         </button>
 
     </main>
 
 
-    <!-- =========================
-         ADD / EDIT MODAL
-    ========================== -->
+    <!-- ADD / EDIT MODAL -->
 
     <div
         class="modal hidden"
